@@ -1,0 +1,145 @@
+
+---
+################################################################################
+#
+#   Section: Organizations
+#
+#   - This section defines the different organizational identities which will
+#   be referenced later in the configuration.
+#
+################################################################################
+Organizations:
+    - &OrdererOrg
+        Name: OrdererOrg
+        ID: OrdererMSP
+        MSPDir: crypto-config/ordererOrganizations/trace.com/msp
+
+    - &OrgFirstParty
+        Name: OrgFirstPartyMSP
+        ID: OrgFirstPartyMSP
+        MSPDir: crypto-config/peerOrganizations/orgfirstparty.trace.com/msp
+        AnchorPeers:
+            - Host: peer0.orgfirstparty.trace.com
+              Port: 7051
+
+    - &OrgSuperv
+        Name: OrgSupervMSP
+        ID: OrgSupervMSP
+        MSPDir: crypto-config/peerOrganizations/orgsuperv.trace.com/msp
+        AnchorPeers:
+            - Host: peer0.orgsuperv.trace.com
+              Port: 7051
+
+    - &OrgInstall
+        Name: OrgInstallMSP
+        ID: OrgSupervMSP
+        MSPDir: crypto-config/peerOrganizations/orginstall.trace.com/msp
+        AnchorPeers:
+            - Host: peer0.orginstall.trace.com
+              Port: 7051
+
+    - &OrgProduce
+        Name: OrgProduceMSP
+        ID: OrgProduceMSP
+        MSPDir: crypto-config/peerOrganizations/orgproduce.trace.com/msp
+        AnchorPeers:
+            - Host: peer0.orgproduce.trace.com
+              Port: 7051
+
+    - &OrgPartProduce
+        Name: OrgPartProduceMSP
+        ID: OrgPartProduceMSP
+        MSPDir: crypto-config/peerOrganizations/orgpartproduce.trace.com/msp
+        AnchorPeers:
+            - Host: peer0.orgpartproduce.trace.com
+              Port: 7051
+
+    - &OrgTransit
+        Name: OrgTransitMSP
+        ID: OrgTransitMSP
+        MSPDir: crypto-config/peerOrganizations/orgtransit.trace.com/msp
+        AnchorPeers:
+            - Host: peer0.orgtransit.trace.com
+              Port: 7051
+
+################################################################################
+#
+#   SECTION: Capabilities
+#
+################################################################################
+Capabilities:
+    Global: &ChannelCapabilities
+        V1_1: true
+    Orderer: &OrdererCapabilities
+        V1_1: true
+    Application: &ApplicationCapabilities
+        V1_2: true
+
+################################################################################
+#
+#   SECTION: Application
+#
+################################################################################
+Application: &ApplicationDefaults
+    Organizations:
+
+################################################################################
+#
+#   SECTION: Orderer
+#
+################################################################################
+Orderer: &OrdererDefaults
+    # Available types are "solo" and "kafka"
+    OrdererType: solo
+    Addresses:
+        - orderer.trace.com:7050
+
+    BatchTimeout: 2s   #区块生成时间
+    BatchSize:         #区块生成的最大交易数量/所占大小
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 64 MB
+        PreferredMaxBytes: 512 KB
+    Kafka:
+        Brokers:
+            - 127.0.0.1:9092
+    Organizations:
+
+################################################################################
+#
+#   Profile
+#
+################################################################################
+Profiles:
+    #Orderer系统默认配置
+    OrgsOrdererGenesis:
+        Capabilities:
+            <<: *ChannelCapabilities
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *OrdererOrg
+            Capabilities:
+                <<: *OrdererCapabilities
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *OrgFirstParty
+                    - *OrgSuperv
+                    - *OrgInstall
+                    - *OrgProduce
+                    - *OrgPartProduce
+                    - *OrgTransit
+    #应用通道配置
+    OrgsChannel:
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *OrgFirstParty
+                - *OrgSuperv
+                - *OrgInstall
+                - *OrgProduce
+                - *OrgPartProduce
+                - *OrgTransit
+            Capabilities:
+                <<: *ApplicationCapabilities
