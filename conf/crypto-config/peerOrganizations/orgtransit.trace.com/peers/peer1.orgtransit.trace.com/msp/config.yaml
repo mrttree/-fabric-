@@ -1,0 +1,8 @@
+NodeOUs:
+  Enable: true
+  ClientOUIdentifier:
+    Certificate: cacerts/ca.orgtransit.trace.com-cert.pem
+    OrganizationalUnitIdentifier: client
+  PeerOUIdentifier:
+    Certificate: cacerts/ca.orgtransit.trace.com-cert.pem
+    OrganizationalUnitIdentifier: peer

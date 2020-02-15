@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="../static/css/detail.css" />
+    <link rel="stylesheet" type="text/css" href="../static/css/business_search.css" />
+    <script src="https://ajax.lug.ustc.edu.cn/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://ajax.lug.ustc.edu.cn/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+</head>
+<body>
+
+<div class="form-wrapper">
+    <form id="business_search" action="area_search" method="get">
+            <input type="text" id="search" name="transitId" placeholder="transitID">
+            <input type="submit" value="搜索" id="submit" >
+    </form>
+</div>
+
+<table cellspacing="0" id="transit_source">
+    <tr>
+        <th>运输订单编号</th>
+        <th>出发时间</th>
+        <th>到达时间</th>
+        <th>出发地</th>
+        <th>目的地</th>
+        <th>中转存储时间</th>
+        <th>运送方式</th>
+        <th>物流公司信息</th>
+        <th>数量</th>
+    </tr>
+
+    <tr ng-repeat="transit in transit_source">
+        <td>{{.transitId}}</td>
+        <td>{{.departureTime}}</td>
+        <td>{{.arrivalTime}}</td>
+        <td>{{.departurePlace}}</td>
+        <td>{{.destination}}</td>
+        <td>{{.depositTime}}</td>
+        <td>{{.transport}}</td>
+        <td>{{.logistics}}</td>
+        <td>{{.num}}</td>
+
+    </tr>
+</table>
+</body>
+<script type="text/javascript" src="../static/js/app.js"> </script>
+</html>

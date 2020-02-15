@@ -1,0 +1,68 @@
+OrdererOrgs:
+  - Name: Orderer
+    Domain: trace.com
+    Specs:
+      #orderer.trace.com
+      - Hostname: orderer
+
+  # ---------------------------------------------------------------------------
+  # Org1 母线使用甲方
+  # ---------------------------------------------------------------------------
+PeerOrgs:
+  - Name: OrgFirstParty
+    Domain: orgfirstparty.trace.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  # ---------------------------------------------------------------------------
+  # Org2  质量监管单位，包括政府监管部门/生产过程中的监管者/安装过程中的监理单位
+  # ---------------------------------------------------------------------------
+  - Name: OrgSuperv
+    Domain: orgsuperv.trace.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  # ---------------------------------------------------------------------------
+  # Org3  现场安装施工单位
+  # ---------------------------------------------------------------------------
+  - Name: OrgInstall
+    Domain: orginstall.trace.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  # ---------------------------------------------------------------------------
+  # Org4  母线生产工厂，如施耐德
+  # ---------------------------------------------------------------------------
+  - Name: OrgProduce
+    Domain: orgproduce.trace.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+      # ---------------------------------------------------------------------------
+      # Org5  零件生产工厂，如铜排/外科/绝缘材料
+      # ---------------------------------------------------------------------------
+  - Name: OrgPartProduce
+    Domain: orgpartproduce.trace.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+    # ---------------------------------------------------------------------------
+    # Org6  零件及母线运输公司
+    # ---------------------------------------------------------------------------
+  - Name: OrgTransit
+    Domain: orgtransit.trace.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1

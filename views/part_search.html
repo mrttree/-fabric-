@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="../static/css/detail.css" />
+    <link rel="stylesheet" type="text/css" href="../static/css/business_search.css" />
+    <script src="https://ajax.lug.ustc.edu.cn/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://ajax.lug.ustc.edu.cn/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+</head>
+<body>
+
+<div class="form-wrapper">
+    <form id="business_search" action="area_search" method="get">
+            <input type="text" id="search" name="partId" placeholder="零件ID">
+            <input type="submit" value="搜索" id="submit" >
+    </form>
+</div>
+
+<table cellspacing="0" id="transit_source">
+    <tr>
+        <th>零件编号</th>
+        <th>名称</th>
+        <th>规格</th>
+        <th>生产时间</th>
+        <th>生产单位</th>
+        <th>出厂日期</th>
+        <th>批次号及合同编号</th>
+        <th>质量认证</th>
+    </tr>
+
+    <tr ng-repeat="transit in transit_source">
+        <td>{{.partID}}</td>
+        <td>{{.Name}}</td>
+        <td>{{.Spec}}</td>
+        <td>{{.MFGDate}}</td>
+        <td>{{.MFRSName}}</td>
+        <td>{{.OutDate}}</td>
+        <td>{{.BatchNum}}</td>
+        <td>{{.QualityCertifi}}</td>
+
+    </tr>
+</table>
+</body>
+<script type="text/javascript" src="../static/js/app.js"> </script>
+</html>

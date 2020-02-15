@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="../static/css/index.css" />
+</head>
+
+
+<!--<% if (messages.success) { %>
+<div class="flash flash-success"><%= messages.success %></div>
+<% } %>-->
+
+
+<div class="hand">
+
+
+    <div class = "card suitdiamonds" onclick="window.location='/form_transit';">
+        <img src="../static/images/submit.png" class="image-icon">
+        <p>添加物流信息</p>
+    </div>
+
+    <div class = "card suitdiamonds" onclick="window.location='/form_part';">
+        <img src="../static/images/batching.png" class="image-icon">
+        <p>添加零件信息</p>
+    </div>
+
+    <div class = "card suitdiamonds" onclick="window.location='/form_produce';">
+        <img src="../static/images/transit.png" class="image-icon">
+        <p>添加母线信息</p>
+    </div>
+
+    <div class = "card suitdiamonds" onclick="window.location='/transit_search';">
+        <img src="../static/images/user-food.png" class="image-icon">
+        <p>物流信息查询</p>
+    </div>
+
+    <div class = "card suitdiamonds" onclick="window.location='/produce_search';">
+        <img src="../static/images/part_of_food.png" class="image-icon">
+        <p>母线信息查询</p>
+    </div>
+
+    <div class = "card suitdiamonds" onclick="window.location='/part_search';">
+        <img src="../static/images/business.png" class="image-icon">
+        <p>零件记录查询</p>
+    </div>
+</div>
+</html>

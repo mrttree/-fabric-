@@ -1,0 +1,169 @@
+# Fabric_v1.1 之后的内容，全部设为true，是为了兼容 1.1 前面的版本
+Capabilities:
+  Global: &ChannelCapabilities
+    V1_1: true
+  Orderer: &OrdererCapabilities
+    V1_1: true
+  Application: &ApplicationCapabilities
+    V1_1: true
+
+
+Organizations:				# 固定的，不能改
+  - &OrdererOrg
+    Name: OrdererOrg
+    ID: OrdererMSP
+    MSPDir: crypto-config/ordererOrganizations/trace.com/msp
+
+  - &OrgFirstParty
+    Name: OrgFirstPartyMSP
+    ID: OrgFirstPartyMSP
+    MSPDir: crypto-config/peerOrganizations/orgfirstparty.trace.com/msp
+    AnchorPeers:
+      - Host: peer0.orgfirstparty.trace.com
+        Port: 7051
+
+  - &OrgSuperv
+    Name: OrgSupervMSP
+    ID: OrgSupervMSP
+    MSPDir: crypto-config/peerOrganizations/orgsuperv.trace.com/msp
+    AnchorPeers:
+      - Host: peer0.orgsuperv.trace.com
+        Port: 7051
+
+  - &OrgInstall
+    Name: OrgInstallMSP
+    ID: OrgSupervMSP
+    MSPDir: crypto-config/peerOrganizations/orginstall.trace.com/msp
+    AnchorPeers:
+      - Host: peer0.orginstall.trace.com
+        Port: 7051
+
+  - &OrgProduce
+    Name: OrgProduceMSP
+    ID: OrgProduceMSP
+    MSPDir: crypto-config/peerOrganizations/orgproduce.trace.com/msp
+    AnchorPeers:
+      - Host: peer0.orgproduce.trace.com
+        Port: 7051
+
+  - &OrgPartProduce
+    Name: OrgPartProduceMSP
+    ID: OrgPartProduceMSP
+    MSPDir: crypto-config/peerOrganizations/orgpartproduce.trace.com/msp
+    AnchorPeers:
+      - Host: peer0.orgpartproduce.trace.com
+        Port: 7051
+
+  - &OrgTransit
+    Name: OrgTransitMSP
+    ID: OrgTransitMSP
+    MSPDir: crypto-config/peerOrganizations/orgtransit.trace.com/msp
+    AnchorPeers:
+      - Host: peer0.orgtransit.trace.com
+        Port: 7051
+
+
+
+# 此处不需要修改，默认即可
+Application: &ApplicationDefaults
+  Organizations:
+
+Orderer: &OrdererDefaults
+  # 共识机制 == 排序算法
+  OrdererType: solo	  # 共识机制 - solo 算法之支持一个排序节点
+  Addresses:          # orderer 节点的网络位置
+    - orderer.trace.cn:7050
+  BatchTimeout: 5s    # 产生一个区块的时间单位
+  BatchSize:
+    MaxMessageCount: 10		# 交易的最大数量，交易数量达到之后会产生一个区块
+    AbsoluteMaxBytes: 64 MB # 数据量达到该制定的值，也会产生一个区块
+    PreferredMaxBytes: 512 KB # 首选 MaxBytes
+
+  Kafka:			  # 本例中的排序算法指定的是solo,此项可以不指定
+    Brokers:
+      - 127.0.0.1:9092   	# 指定 Kafka 排序集群所在的网络位置
+  MaxChannels: 0
+  Organizations:
+
+Profiles:
+  OrgsOrdererGenesis:
+    Capabilities:
+      <<: *ChannelCapabilities
+    Orderer:
+      <<: *OrdererDefaults
+      Organizations:
+        - *OrdererOrg
+      Capabilities:
+        <<: *OrdererCapabilities
+    # 联盟
+    Consortiums:
+      # 物流信息
+      TransitConsortium:
+        Organizations:
+          - *OrgFirstParty
+          - *OrgInstall
+          - *OrgProduce
+          - *OrgPartProduce
+          - *OrgTransit
+      # 母线质检信息
+      SupervConsortium:
+        Organizations:
+          - *OrgFirstParty
+          - *OrgSuperv
+          - *OrgInstall
+          - *OrgProduce
+          - *OrgPartProduce
+      # 资金流动及保险理赔信息
+      FundConsortium:
+        Organizations:
+          - *OrgFirstParty
+          - *OrgSuperv
+          - *OrgInstall
+          - *OrgProduce
+          - *OrgPartProduce
+          - *OrgTransit
+          #此处后期加入保险公司
+
+  # 生成物流信息通道
+  TransitOrgschannel:
+    Consortium: TransitConsortium
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *OrgFirstParty
+        - *OrgInstall
+        - *OrgProduce
+        - *OrgPartProduce
+        - *OrgTransit
+      Capabilities:
+        <<: *ApplicationCapabilities
+
+    #生成质监信息通道
+  SupervOrgchannel:
+    Consortium: SupervConsortium
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *OrgFirstParty
+        - *OrgSuperv
+        - *OrgInstall
+        - *OrgProduce
+        - *OrgPartProduce
+      Capabilities:
+        <<: *ApplicationCapabilities
+
+    #生成资金流动通道
+  FundOrgchannel:
+    Consortium: FundConsortium
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *OrgFirstParty
+        - *OrgSuperv
+        - *OrgInstall
+        - *OrgProduce
+        - *OrgPartProduce
+        - *OrgTransit
+      Capabilities:
+        <<: *ApplicationCapabilities
+
